@@ -1,6 +1,7 @@
 package br.com.luca5dev.exception.handler;
 
 import br.com.luca5dev.exception.ExceptionResponse;
+import br.com.luca5dev.exception.UnsupportedMathOperationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -15,9 +16,16 @@ import java.util.Date;
 @RestController
 public class CustomEntityResponseHandler extends ResponseEntityExceptionHandler{
 
+    @ExceptionHandler(Exception.class)
     public final ResponseEntity<ExceptionResponse> handleAllExceptions(Exception ex, WebRequest request){
         ExceptionResponse response = new ExceptionResponse(new Date(), ex.getMessage(), request.getDescription(false));
     return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(UnsupportedMathOperationException.class)
+    public final ResponseEntity<ExceptionResponse> handleBadRequestExceptions(Exception ex, WebRequest request){
+        ExceptionResponse response = new ExceptionResponse(new Date(), ex.getMessage(), request.getDescription(false));
+    return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
 }
